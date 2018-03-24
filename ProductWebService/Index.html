@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div>
+        <h2>All products</h2>
+        <ul id="products"></ul>
+    </div>
+    <div>
+        <h2>search by ID</h2>
+        <input type="text" id="prodid" size="5"/>
+        <input type="button" value="Search" onclick="find();"/>
+        <p id="product"></p>
+    </div>
+    <!--<script src="Scripts/jquery-1.10.2.js"></script>-->
+    <script scr="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"
+            integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+            crossorigin="anonymous"></script>
+    
+    <script>
+        var uri = 'api/products';
+        $(document).ready(function () {
+            $.getJSON(uri).done(function (data) {
+                $.each(data, function (Key, item) {
+                    $('<li>', { text: formatItem(item) }).appendTo($('#products'))
+                });
+            });
+
+        });
+        function formatItem(item) {
+            return item.Name+ ':$'+item.Price
+        }
+        function find(){
+            var id = $('#prodid').val();
+            $.getJSON(uri + '/' + id).done(function (data) {
+                $('#product').text(formatItem(data));
+            })
+             .fail(function(jqXHR,textstatus,err){
+                 $('#product').text("Error:"+err);
+            });
+
+        }
+
+    </script>
+</body>
+</html>
